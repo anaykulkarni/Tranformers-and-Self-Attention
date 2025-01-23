@@ -1,0 +1,1133 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h3 id="assignment-2-report">Assignment 2: Report</h3>
+<h4 id="author-anay-kulkarni-ankulkarniucsd.edu">Author: Anay Kulkarni (<a href="mailto:ankulkarni@ucsd.edu">ankulkarni@ucsd.edu</a>)</h4>
+<hr>
+<h3 id="part-1">PART 1</h3>
+<h3 id="introduction">Introduction</h3>
+<p>This report details the findings from the experiment conducted to classify speech segments attributed to Barack Obama, George W. Bush, and George H. Bush. The model employs a transformer architecture enhanced with absolute positional encoding using sine and cosine functions. The experiment evaluates the model’s performance across multiple epochs to determine its accuracy on both training and test datasets.</p>
+<h3 id="experiment-setup">Experiment Setup</h3>
+<h4 id="optimizer-and-loss-function">Optimizer and Loss Function:</h4>
+<ul>
+<li>
+<p><strong>Optimizer</strong>: The Adam optimizer was employed for training the model. Adam is an adaptive learning rate optimization algorithm that combines the benefits of two other extensions of stochastic gradient descent. It computes individual adaptive learning rates for different parameters from estimates of first and second moments of the gradients, making it well-suited for problems with noisy gradients, such as in deep learning.</p>
+</li>
+<li>
+<p><strong>Loss Function</strong>: The cross-entropy loss function was used to quantify the difference between the predicted class probabilities and the true class labels. This loss function is commonly used in classification tasks, as it measures the performance of a model whose output is a probability value between 0 and 1. The objective is to minimize the cross-entropy loss during training, leading to improved classification accuracy.</p>
+</li>
+</ul>
+<h4 id="model-architecture">Model Architecture:</h4>
+<ul>
+<li><strong>Absolute Positional Encoding</strong>: The positional encoding for the<span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.65952em; vertical-align: 0em;"></span><span class="mord mathnormal">i</span></span></span></span></span>-th position and<span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">d</span></span></span></span></span>-th dimension is defined as follows:</li>
+</ul>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mi>E</mi><mo stretchy="false">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo separator="true">,</mo><mn>2</mn><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>sin</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mfrac><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow><mrow><mn>1000</mn><msup><mn>0</mn><mfrac><mrow><mn>2</mn><mi>i</mi></mrow><msub><mi>d</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub></mfrac></msup></mrow></mfrac><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+PE(pos, 2i) = \sin\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">PE</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">2</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 2.46193em; vertical-align: -1.01193em;"></span><span class="mop">sin</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="minner"><span class="mopen delimcenter" style="top: 0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.10756em;"><span class="" style="top: -2.11em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="mord"><span class="mord">1000</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.12193em;"><span class="" style="top: -3.52337em; margin-right: 0.05em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.855086em;"><span class="" style="top: -2.656em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3448em;"><span class="" style="top: -2.3448em; margin-left: 0em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.69444em;"></span><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right: 0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.34964em;"><span class=""></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.2255em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line mtight" style="border-bottom-width: 0.049em;"></span></span><span class="" style="top: -3.384em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.593743em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.35193em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.79893em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 1.01193em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top: 0em;"><span class="delimsizing size3">)</span></span></span></span></span></span></span></span><br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mi>E</mi><mo stretchy="false">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo separator="true">,</mo><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mi>cos</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mfrac><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow><mrow><mn>1000</mn><msup><mn>0</mn><mfrac><mrow><mn>2</mn><mi>i</mi></mrow><msub><mi>d</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub></mfrac></msup></mrow></mfrac><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+PE(pos, 2i + 1) = \cos\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">PE</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">2</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 2.46193em; vertical-align: -1.01193em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="minner"><span class="mopen delimcenter" style="top: 0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.10756em;"><span class="" style="top: -2.11em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="mord"><span class="mord">1000</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.12193em;"><span class="" style="top: -3.52337em; margin-right: 0.05em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.855086em;"><span class="" style="top: -2.656em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3448em;"><span class="" style="top: -2.3448em; margin-left: 0em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.69444em;"></span><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right: 0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.34964em;"><span class=""></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.2255em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line mtight" style="border-bottom-width: 0.049em;"></span></span><span class="" style="top: -3.384em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.593743em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.35193em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.79893em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 1.01193em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top: 0em;"><span class="delimsizing size3">)</span></span></span></span></span></span></span></span></p>
+<ul>
+<li>
+<p><strong>Encoder Architecture</strong>: The encoder comprises 4 layers, each containing 2 attention heads. This multi-layer architecture allows the model to learn hierarchical representations of the input data while utilizing multiple attention heads to focus on different parts of the input sequence. The use of absolute positional encoding ensures that the sequential information is preserved across the layers.</p>
+</li>
+<li>
+<p><strong>Classifier Architecture</strong>: Following the encoder, a simple feedforward classifier was implemented with one hidden layer. The hidden layer uses the ReLU (Rectified Linear Unit) activation function, which helps introduce non-linearity into the model. This architecture allows the classifier to make predictions based on the features extracted by the encoder.</p>
+</li>
+</ul>
+<h3 id="hyperparameters">Hyperparameters</h3>
+<p>The following hyperparameters were used in the experiment:</p>
+
+<table>
+<thead>
+<tr>
+<th>Hyperparameter</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>embed_dim</code></td>
+<td>64</td>
+<td>Dimension of the embedding vector for input tokens, determining the feature size for each token.</td>
+</tr>
+<tr>
+<td><code>num_heads</code></td>
+<td>2</td>
+<td>Number of attention heads in the multi-head attention mechanism, allowing the model to focus on different parts of the input.</td>
+</tr>
+<tr>
+<td><code>num_layers</code></td>
+<td>4</td>
+<td>Total number of transformer layers in the encoder, which dictates the model’s depth.</td>
+</tr>
+<tr>
+<td><code>num_classes</code></td>
+<td>3</td>
+<td>Number of output classes corresponding to each politician being classified.</td>
+</tr>
+<tr>
+<td><code>n_input</code></td>
+<td>64</td>
+<td>Input size for the classifier, matching the embedding size of the transformer.</td>
+</tr>
+<tr>
+<td><code>ff_dim</code></td>
+<td>100</td>
+<td>Dimension of the feedforward network’s hidden layer within each transformer block.</td>
+</tr>
+<tr>
+<td><code>max_len</code></td>
+<td>32</td>
+<td>Maximum sequence length (block size) for input sentences, determining how many tokens can be processed.</td>
+</tr>
+<tr>
+<td><code>batch_size</code></td>
+<td>16</td>
+<td>Number of samples processed together in a single iteration during training.</td>
+</tr>
+<tr>
+<td><code>dropout</code></td>
+<td>0.1</td>
+<td>Dropout rate applied to reduce overfitting by randomly setting a fraction of input units to 0 during training.</td>
+</tr>
+<tr>
+<td><code>num_epochs</code></td>
+<td>15</td>
+<td>Total number of complete passes through the training dataset.</td>
+</tr>
+<tr>
+<td><code>learning_rate</code></td>
+<td>1e-3</td>
+<td>Step size for updating weights during training, controlling how much to change the model in response to the estimated error.</td>
+</tr>
+<tr>
+<td><code>max_iters</code></td>
+<td>500</td>
+<td>Maximum number of iterations for processing the entire dataset to limit computational load.</td>
+</tr>
+</tbody>
+</table><h3 id="results">Results</h3>
+<p>The model was trained for 15 epochs. The following table summarizes the training and test accuracy achieved at each epoch:</p>
+
+<table>
+<thead>
+<tr>
+<th>Epoch</th>
+<th>Training Accuracy (%)</th>
+<th>Test Accuracy (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>43.16</td>
+<td>33.73</td>
+</tr>
+<tr>
+<td>2</td>
+<td>43.69</td>
+<td>44.13</td>
+</tr>
+<tr>
+<td>3</td>
+<td>47.32</td>
+<td>40.00</td>
+</tr>
+<tr>
+<td>4</td>
+<td>52.25</td>
+<td>47.20</td>
+</tr>
+<tr>
+<td>5</td>
+<td>55.35</td>
+<td>56.93</td>
+</tr>
+<tr>
+<td>6</td>
+<td>61.14</td>
+<td>64.93</td>
+</tr>
+<tr>
+<td>7</td>
+<td>66.83</td>
+<td>55.73</td>
+</tr>
+<tr>
+<td>8</td>
+<td>70.84</td>
+<td>69.07</td>
+</tr>
+<tr>
+<td>9</td>
+<td>73.85</td>
+<td>69.60</td>
+</tr>
+<tr>
+<td>10</td>
+<td>77.20</td>
+<td>76.53</td>
+</tr>
+<tr>
+<td>11</td>
+<td>79.88</td>
+<td>79.73</td>
+</tr>
+<tr>
+<td>12</td>
+<td>83.65</td>
+<td>80.40</td>
+</tr>
+<tr>
+<td>13</td>
+<td>85.37</td>
+<td>80.27</td>
+</tr>
+<tr>
+<td>14</td>
+<td>85.76</td>
+<td>83.20</td>
+</tr>
+<tr>
+<td>15</td>
+<td>88.34</td>
+<td>84.93</td>
+</tr>
+</tbody>
+</table><h3 id="observations">Observations</h3>
+<ul>
+<li><strong>Performance</strong>: The model started with relatively low training and test accuracies in the first epoch, indicating the necessity for the training process to establish initial weights effectively. By the end of the training process, the model achieved a training accuracy of <strong>88.34%</strong> and a test accuracy of <strong>84.93%</strong>, demonstrating its ability to generalize from the training set to unseen data.</li>
+</ul>
+<h3 id="attention-mechanism">Attention Mechanism</h3>
+<p align="center">
+  <img src="part1-attention_map_41.png" alt="" width="300">
+  <img src="part1-attention_map_32.png" alt="" width="300">
+</p>
+<h4 id="visualization-of-attention-maps-for-sample-sentence">Visualization of attention maps for sample sentence:</h4>
+<ol>
+<li>
+<p><strong>Map Characteristics</strong>: Each attention map shows a distribution of attention across tokens in the input sentence for a particular layer and head. The brighter areas indicate higher attention values, suggesting that these tokens are more “focused on” by that attention head.</p>
+</li>
+<li>
+<p><strong>Padding Tokens</strong>: Both maps’ rightmost and bottom portions consist of <code>&lt;pad&gt;</code> tokens. It’s typical for these regions to have less meaningful or even uniform attention values because the padding is not relevant to the actual content.</p>
+</li>
+</ol>
+<h4 id="sample-sentence-under-consideration">Sample sentence under consideration:</h4>
+<blockquote>
+<p>“When one nation pursues a nuclear weapon, the risk of nuclear attack rises for all nations.”</p>
+</blockquote>
+<h3 id="attention-map-for-layer-4-head-1"><strong>Attention Map for Layer #4, Head #1</strong></h3>
+<ul>
+<li><strong>High Attention on Specific Tokens</strong>: In this map, we see distinct columns and rows with higher attention around tokens such as “nation,” “pursues,” and “nuclear.”</li>
+<li><strong>Localized Attention</strong>: This head appears to focus more on pairs of words within the sentence, with notable attention on nearby or related words. For example, “nation” and “pursues” may have strong connections due to context, while “nuclear” is a significant focus given the topic.</li>
+<li><strong>Spread of Attention</strong>: This head balances its attention across multiple tokens rather than focusing solely on one word. This might indicate it’s responsible for capturing semantic relationships across nearby words.</li>
+<li><strong>Effect on <code>&lt;pad&gt;</code> Tokens</strong>: The attention weights across words and pad tokens are dark, which shows that the head recognizes that the pad tokens do not add meaning to the sentence.</li>
+</ul>
+<h4 id="sample-sentence-under-consideration-1">Sample sentence under consideration:</h4>
+<blockquote>
+<p>“When one nation pursues a nuclear weapon, the risk of nuclear attack rises for all nations.”</p>
+</blockquote>
+<h3 id="attention-map-for-layer-3-head-2"><strong>Attention Map for Layer #3, Head #2</strong></h3>
+<ul>
+<li><strong>Strong Focus on specific Tokens</strong>: This head appears to concentrate much more on the token “cooperation” and its association with other tokens in the sentence (like “level” and “condemnation”). This may indicate that the model is attending particularly to specific words that it considers important for context.</li>
+<li><strong>Padding Tokens</strong>: The  tokens appear toward the bottom and right side of the heatmap, receiving minimal attention. This behavior is expected, as the model typically learns to focus on real tokens while ignoring padding during training.</li>
+</ul>
+<h3 id="model-parameters">Model Parameters</h3>
+<p>In general number of parameters for transformation layer can be calculated by,<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mo stretchy="false">(</mo><mtext>Input&nbsp;Features</mtext><mo>×</mo><mtext>Output&nbsp;Features</mtext><mo stretchy="false">)</mo><mo>+</mo><mtext>Bias</mtext></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = (\text{Input Features} \times \text{Output Features}) + \text{Bias}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Input&nbsp;Features</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord text"><span class="mord">Output&nbsp;Features</span></span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Bias</span></span></span></span></span></span></span></p>
+<ol>
+<li>
+<p><strong>Token and Position Embeddings (No bias terms)</strong>:</p>
+<ul>
+<li><strong>Embedding for Tokens</strong>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mtext>vocab_size</mtext><mo>×</mo><mtext>embed_dim</mtext><mo>=</mo><mn>5755</mn><mo>×</mo><mn>64</mn><mo>=</mo><mn>368</mn><mo separator="true">,</mo><mn>320</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = \text{vocab\_size} \times \text{embed\_dim} = 5755 \times 64 = 368,320
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">vocab_size</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">5755</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">368</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">320</span></span></span></span></span></span></li>
+<li><strong>Embedding for Positional Encoding</strong>: This embedding is static as we use absolute positional encoding</li>
+</ul>
+</li>
+<li>
+<p><strong>Transformer Encoder Layers</strong>:<br>
+Each <code>TransformerEncoderLayer</code> contains:</p>
+<ul>
+<li>
+<p><strong>Parameters in <code>MultiHeadAttention</code></strong>:</p>
+<ul>
+<li>For <code>Q</code>, <code>K</code>,  <code>V</code>, and <code>output</code> linear layers:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mn>4</mn><mo>×</mo><mo stretchy="false">[</mo><mo stretchy="false">(</mo><mtext>embed_dim</mtext><mo>×</mo><mtext>embed_dim</mtext><mo stretchy="false">)</mo><mo>+</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mo stretchy="false">]</mo><mo>=</mo><mn>4</mn><mo>×</mo><mo stretchy="false">[</mo><msup><mtext>64</mtext><mn>2</mn></msup><mo>+</mo><mn>64</mn><mo stretchy="false">]</mo><mo>=</mo><mn>16</mn><mo separator="true">,</mo><mn>640</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = 4 \times [(\text{embed\_dim} \times \text{embed\_dim})  + bias] = 4 \times [\text{64}^2 + 64] = 16,640
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.06em; vertical-align: -0.31em;"></span><span class="mopen">[(</span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.06em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal">bia</span><span class="mord mathnormal">s</span><span class="mclose">]</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.11411em; vertical-align: -0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord text"><span class="mord">64</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.864108em;"><span class="" style="top: -3.113em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">64</span><span class="mclose">]</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">16</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">640</span></span></span></span></span></span></li>
+</ul>
+</li>
+<li>
+<p><strong>Feedforward Network</strong>:</p>
+<ul>
+<li>First linear layer:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mtext>embed_dim</mtext><mo>×</mo><mtext>ff_dim</mtext><mo>+</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mo>=</mo><mn>64</mn><mo>×</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>=</mo><mn>6500</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = \text{embed\_dim} \times \text{ff\_dim} + bias = 64 \times 100 + 100 = 6500
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">ff_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">bia</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">6500</span></span></span></span></span></span></li>
+<li>Second linear layer:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mtext>ff_dim</mtext><mo>×</mo><mtext>embed_dim</mtext><mo>+</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mo>=</mo><mn>100</mn><mo>×</mo><mn>64</mn><mo>+</mo><mn>64</mn><mo>=</mo><mn>6464</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = \text{ff\_dim} \times \text{embed\_dim} + bias = 100 \times 64 + 64 = 6464
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">ff_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">bia</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">6464</span></span></span></span></span></span></li>
+</ul>
+</li>
+<li>
+<p><strong>Layer Normalization</strong>: Each layer normalization typically has two parameters (weight and bias) per feature dimension:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mn>2</mn><mo>×</mo><mtext>embed_dim</mtext><mo>=</mo><mn>2</mn><mo>×</mo><mn>64</mn><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = 2 \times \text{embed\_dim} = 2 \times 64 = 128
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">128</span></span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>Total for one</strong> <code>TransformerEncoderLayer</code>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total&nbsp;Parameters</mtext><mo>=</mo><mn>16</mn><mo separator="true">,</mo><mn>640</mn><mo>+</mo><mn>6</mn><mo separator="true">,</mo><mn>500</mn><mo>+</mo><mn>6464</mn><mo>+</mo><mn>128</mn><mo>+</mo><mn>128</mn><mo>=</mo><mn>29860</mn></mrow><annotation encoding="application/x-tex">
+\text{Total Parameters} = 16,640 + 6,500 + 6464 + 128 + 128 = 29860 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Total&nbsp;Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">16</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">640</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">6</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">500</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">6464</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">128</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">128</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">29860</span></span></span></span></span></span></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Total for all layers in <code>TransformerEncoder</code></strong>:<br>
+If we have <code>num_layers</code>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total&nbsp;for&nbsp;Layers</mtext><mo>=</mo><mtext>num_layers</mtext><mo>×</mo><mo stretchy="false">(</mo><mtext>Total&nbsp;for&nbsp;one&nbsp;layer</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>4</mn><mo>×</mo><mn>29860</mn></mrow><annotation encoding="application/x-tex">
+\text{Total for Layers} = \text{num\_layers} \times (\text{Total for one layer}) = 4 \times 29860
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord text"><span class="mord">Total&nbsp;for&nbsp;Layers</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">num_layers</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Total&nbsp;for&nbsp;one&nbsp;layer</span></span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">29860</span></span></span></span></span></span><br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total&nbsp;Parameters&nbsp;in&nbsp;Transformer&nbsp;Encoder</mtext><mo>=</mo><mn>119</mn><mo separator="true">,</mo><mn>440</mn></mrow><annotation encoding="application/x-tex">
+\text{Total Parameters in Transformer Encoder} = 119,440
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Total&nbsp;Parameters&nbsp;in&nbsp;Transformer&nbsp;Encoder</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">119</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">440</span></span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>Parameters in <code>FeedforwardClassifier</code></strong>:</p>
+<ul>
+<li>First Linear Layer:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mtext>embed_dim</mtext><mo>×</mo><mtext>ff_dim</mtext><mo>+</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mo>=</mo><mn>64</mn><mo>×</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>=</mo><mn>6500</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = \text{embed\_dim} \times \text{ff\_dim} + bias = 64 \times 100 + 100 = 6500
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">ff_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">bia</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">6500</span></span></span></span></span></span></li>
+<li>Second Linear Layer:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mtext>ff_dim</mtext><mo>×</mo><mtext>num_classes</mtext><mo>+</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mo>=</mo><mn>100</mn><mo>×</mo><mn>3</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn>303</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = \text{ff\_dim} \times \text{num\_classes} + bias = 100 \times 3 + 3 = 303
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">ff_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">num_classes</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">bia</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">303</span></span></span></span></span></span></li>
+<li>Total Parameters,<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total</mtext><mo>=</mo><mn>6500</mn><mo>+</mo><mn>303</mn><mo>=</mo><mn>6803</mn></mrow><annotation encoding="application/x-tex">
+\text{Total} = 6500 + 303 = 6803
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Total</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">6500</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">303</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">6803</span></span></span></span></span></span></li>
+</ul>
+</li>
+<li>
+<p><strong>Total Parameters in <code>TransformerModelwithCLS</code></strong>:</p>
+<p><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>Total&nbsp;Trainable&nbsp;Parameters</mtext><mo>=</mo><mtext>Token&nbsp;Embedding</mtext><mo>+</mo><mtext>Encoder</mtext><mo>+</mo><mtext>Classifier</mtext></mrow><annotation encoding="application/x-tex">\text{Total Trainable Parameters} = \text{Token Embedding} + \text{Encoder} + \text{Classifier}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Total&nbsp;Trainable&nbsp;Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord text"><span class="mord">Token&nbsp;Embedding</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.77777em; vertical-align: -0.08333em;"></span><span class="mord text"><span class="mord">Encoder</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Classifier</span></span></span></span></span></span></p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total&nbsp;Trainable&nbsp;Parameters</mtext><mo>=</mo><mn>368</mn><mo separator="true">,</mo><mn>320</mn><mo>+</mo><mn>119</mn><mo separator="true">,</mo><mn>440</mn><mo>+</mo><mn>6803</mn><mo>=</mo><mn>494</mn><mo separator="true">,</mo><mn>563</mn></mrow><annotation encoding="application/x-tex">
+\text{Total Trainable Parameters} = 368,320 + 119,440 + 6803 = 494,563
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Total&nbsp;Trainable&nbsp;Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">368</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">320</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">119</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">440</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">6803</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">494</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">563</span></span></span></span></span></span></p>
+</li>
+</ol>
+<h3 id="conclusion">Conclusion:</h3>
+<p>The experiment successfully demonstrated the application of a transformer-based model for classifying speech segments attributed to different politicians. The use of absolute positional encoding proved effective in maintaining the sequential information of the input data. With improvements in accuracy throughout the training process, the findings indicate that the model is capable of learning meaningful representations for speech classification tasks.</p>
+<h3 id="output">Output:</h3>
+<pre><code>Loading data and creating tokenizer ...
+Vocabulary size is 5755
+Epoch [1/15], Training Accuracy: 43.16, Test Accuracy: 33.73
+Epoch [2/15], Training Accuracy: 43.69, Test Accuracy: 44.13
+Epoch [3/15], Training Accuracy: 47.32, Test Accuracy: 40.00
+Epoch [4/15], Training Accuracy: 52.25, Test Accuracy: 47.20
+Epoch [5/15], Training Accuracy: 55.35, Test Accuracy: 56.93
+Epoch [6/15], Training Accuracy: 61.14, Test Accuracy: 64.93
+Epoch [7/15], Training Accuracy: 66.83, Test Accuracy: 55.73
+Epoch [8/15], Training Accuracy: 70.84, Test Accuracy: 69.07
+Epoch [9/15], Training Accuracy: 73.85, Test Accuracy: 69.60
+Epoch [10/15], Training Accuracy: 77.20, Test Accuracy: 76.53
+Epoch [11/15], Training Accuracy: 79.88, Test Accuracy: 79.73
+Epoch [12/15], Training Accuracy: 83.65, Test Accuracy: 80.40
+Epoch [13/15], Training Accuracy: 85.37, Test Accuracy: 80.27
+Epoch [14/15], Training Accuracy: 85.76, Test Accuracy: 83.20
+Epoch [15/15], Training Accuracy: 88.34, Test Accuracy: 84.93
+Input tensor shape: torch.Size([1, 32])
+Number of attention maps = Layers * heads =  8
+Figure(640x480)
+Input tensor shape: torch.Size([1, 32])
+Number of attention maps = Layers * heads =  8
+Figure(640x480)
+</code></pre>
+<hr>
+<h3 id="part-2">PART 2</h3>
+<h3 id="introduction-1">Introduction</h3>
+<p>We discuss the results of training a language model (LM) on speeches by three U.S. Presidents: Barack Obama, George W. Bush, and George H. Bush. The objective was to evaluate the model’s performance in terms of perplexity, which measures how well the model predicts the next word in a sequence. A lower perplexity indicates better performance.</p>
+<h3 id="experimental-setup-and-model-architecture">Experimental Setup and Model Architecture:</h3>
+
+<table>
+<thead>
+<tr>
+<th><strong>Hyperparameter</strong></th>
+<th><strong>Value</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>embed_dim</code></td>
+<td>64</td>
+<td>Dimension of the token embeddings, representing tokens in a continuous vector space.</td>
+</tr>
+<tr>
+<td><code>num_heads</code></td>
+<td>2</td>
+<td>Number of attention heads in the multi-head self-attention mechanism.</td>
+</tr>
+<tr>
+<td><code>num_layers</code></td>
+<td>4</td>
+<td>Total number of transformer decoder layers stacked in the model.</td>
+</tr>
+<tr>
+<td><code>ff_dim</code></td>
+<td>100</td>
+<td>Dimension of the feedforward layers in each transformer layer (hidden dimension).</td>
+</tr>
+<tr>
+<td><code>max_len</code></td>
+<td>32</td>
+<td>Maximum sequence length or block size for input sequences.</td>
+</tr>
+<tr>
+<td><code>batch_size</code></td>
+<td>16</td>
+<td>Number of samples processed in one iteration (batch size).</td>
+</tr>
+<tr>
+<td><code>dropout</code></td>
+<td>0.1</td>
+<td>Dropout rate used to prevent overfitting during training.</td>
+</tr>
+<tr>
+<td><code>learning_rate</code></td>
+<td>1e-3</td>
+<td>Learning rate for the Adam optimizer, controlling the step size during parameter updates.</td>
+</tr>
+<tr>
+<td><code>eval_interval</code></td>
+<td>100</td>
+<td>Frequency of evaluating training and test perplexity during training iterations.</td>
+</tr>
+<tr>
+<td><code>eval_iters</code></td>
+<td>200</td>
+<td>Number of iterations used to evaluate perplexity on the test set.</td>
+</tr>
+<tr>
+<td><code>max_iters</code></td>
+<td>500</td>
+<td>Maximum number of iterations for processing the dataset; limits training to approximately 256,000 tokens.</td>
+</tr>
+</tbody>
+</table><p>The transformer decoder model consists of:</p>
+<ul>
+<li>
+<p><strong>Token Embeddings:</strong> Trainable embeddings of 64 dimensions represent tokens in a continuous vector space.</p>
+</li>
+<li>
+<p><strong>Positional Encoding:</strong> Uses sine and cosine functions for absolute positional encoding, capturing token order in sequences.</p>
+</li>
+<li>
+<p><strong>Decoder Layers:</strong> Comprises 4 decoder layers, each containing:</p>
+<ul>
+<li><strong>Masked Self-Attention Layer:</strong> Focuses on relevant tokens while masking future tokens.</li>
+<li><strong>Feed Forward Layers:</strong> Two linear layers that expand and project the representation, enhancing pattern capture.</li>
+<li><strong>Normalization Layers:</strong> Two LayerNorm layers in each decoder layer stabilize training and improve convergence.</li>
+</ul>
+</li>
+<li>
+<p><strong>Output Layer:</strong> Converts decoder outputs into vocabulary probabilities through a linear transformation.</p>
+</li>
+</ul>
+<h3 id="training-configuration">Training Configuration</h3>
+<ul>
+<li>
+<p><strong>Optimizer:</strong> Utilizes the <strong>Adam optimizer</strong> for adaptive learning rate capabilities.</p>
+</li>
+<li>
+<p><strong>Loss Function:</strong> Employs <strong>cross-entropy loss</strong> to measure the performance of token predictions.</p>
+</li>
+</ul>
+<h3 id="training-and-evaluation-process">Training and Evaluation Process:</h3>
+<p>The model is trained by iteratively minimizing cross-entropy loss, with perplexity used to evaluate performance on training and test sets across multiple iterations. We perform 500 training iterations, compute training, and test perplexity at an interval of 100 iterations. Perplexity is computed over cross-entropy losses averaged over 200 iterations.</p>
+<h3 id="perplexity-results">Perplexity Results:</h3>
+<h4 id="barack-obama">Barack Obama</h4>
+
+<table>
+<thead>
+<tr>
+<th>Iteration</th>
+<th>Training Perplexity</th>
+<th>Test Perplexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>567.34</td>
+<td>680.03</td>
+</tr>
+<tr>
+<td>200</td>
+<td>392.19</td>
+<td>525.82</td>
+</tr>
+<tr>
+<td>300</td>
+<td>286.79</td>
+<td>449.00</td>
+</tr>
+<tr>
+<td>400</td>
+<td>216.10</td>
+<td>398.32</td>
+</tr>
+<tr>
+<td>500</td>
+<td>172.04</td>
+<td>371.26</td>
+</tr>
+</tbody>
+</table><h4 id="george-w.-bush">George W. Bush</h4>
+
+<table>
+<thead>
+<tr>
+<th>Iteration</th>
+<th>Training Perplexity</th>
+<th>Test Perplexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>577.55</td>
+<td>775.91</td>
+</tr>
+<tr>
+<td>200</td>
+<td>405.37</td>
+<td>612.83</td>
+</tr>
+<tr>
+<td>300</td>
+<td>274.80</td>
+<td>517.62</td>
+</tr>
+<tr>
+<td>400</td>
+<td>198.02</td>
+<td>461.38</td>
+</tr>
+<tr>
+<td>500</td>
+<td>153.60</td>
+<td>452.25</td>
+</tr>
+</tbody>
+</table><h4 id="george-h.-bush">George H. Bush</h4>
+
+<table>
+<thead>
+<tr>
+<th>Iteration</th>
+<th>Training Perplexity</th>
+<th>Test Perplexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>582.72</td>
+<td>720.28</td>
+</tr>
+<tr>
+<td>200</td>
+<td>417.83</td>
+<td>571.90</td>
+</tr>
+<tr>
+<td>300</td>
+<td>289.76</td>
+<td>472.10</td>
+</tr>
+<tr>
+<td>400</td>
+<td>217.54</td>
+<td>419.76</td>
+</tr>
+<tr>
+<td>500</td>
+<td>171.96</td>
+<td>398.97</td>
+</tr>
+</tbody>
+</table><h3 id="attention-maps">Attention Maps</h3>
+<p>Now, we discuss how different layers interact with different sentences.</p>
+<p align="center">
+  <img src="part2-attention_map_32.png" alt="" width="300">
+  <img src="part2-attention_map_41.png" alt="" width="300">
+</p>
+<h4 id="sample-sentence-under-consideration-2">Sample sentence under consideration:</h4>
+<blockquote>
+<p>“For peace to come, it is time for them, and all of us, to live up to our responsibilities.”</p>
+</blockquote>
+<h3 id="attention-map-for-layer-3-head-2-1"><strong>Attention Map for Layer #3, Head #2</strong></h3>
+<p>This attention map represents the attention weights for Layer #3, Head #2 of the transformer decoder model.</p>
+<ul>
+<li>
+<p><strong>Masked Self-Attention</strong>:</p>
+<ul>
+<li>The attention weights are most concentrated along the diagonal and lower half of the matrix, which suggests that tokens in this layer and head are focusing primarily on themselves or the preceding tokens. This behavior is clear depiction of the masked self-attention applied by the model. A bright spot at the top left corner indicates that when the sequence is just one token long, all the attention is focused on it, and as the sequence size increases, the attention weights get spread over other tokens that precede them.</li>
+</ul>
+</li>
+<li>
+<p><strong>Phrase-Level Attention</strong>:</p>
+<ul>
+<li>There are noticeable pockets of attention extending from the diagonal. For example, there is slightly higher attention paid to tokens like “peace,” “to,” “come,” and “live,” and “up.” These words may represent important parts of the sentence, capturing meaning or emphasis, and could indicate that the model is trying to link semantically related words.</li>
+</ul>
+</li>
+<li>
+<p><strong>Handling Padding Tokens</strong>:</p>
+<ul>
+<li>The <code>&lt;pad&gt;</code> tokens at the end of the sequence (from “responsibilities” onward) have little to no attention weight, as indicated by the dark squares in the lower right. This is expected, as padding tokens are generally ignored by the model once attention masking is applied.</li>
+</ul>
+</li>
+</ul>
+<h4 id="sample-sentence-under-consideration-3">Sample sentence under consideration:</h4>
+<blockquote>
+<p>“More of you have lost your homes and even more are watching your home values plummet.”</p>
+</blockquote>
+<h3 id="attention-map-for-layer-4-head-1-1"><strong>Attention Map for Layer #4, Head #1</strong></h3>
+<p>This attention map for Layer #4, Head #1 highlights the model’s focus on specific words in the sentence. Most of the behaviours for this layer, such as masked self-attention, ignoring padding, and focus its on key words are similar to the previous layer discussed.</p>
+<ul>
+<li><strong>Emphasis on Key Phrases</strong>: Words like “lost,” “homes,” “values,” and “plummet” receive more attention, likely because they convey critical information related to the sentence’s meaning.</li>
+<li><strong>Broader Context Capture</strong>: Compared to the previous layer, this layer seems to capture a marginally broader context, with attention reaching further back, potentially for understanding sentence-wide dependencies.</li>
+</ul>
+<h3 id="discussion-of-findings">Discussion of Findings:</h3>
+<h3 id="training-and-test-perplexity">Training and Test Perplexity</h3>
+<ul>
+<li><strong>General Trends:</strong> Across all three presidents, a consistent trend was observed: both training and test perplexity decreased as training progressed. This indicates that the model effectively learned the language patterns present in the speeches.</li>
+<li><strong>Barack Obama:</strong> The model achieved the lowest test perplexity of 371.26 at the final iteration. The reduction from an initial perplexity of 680.03 demonstrates significant learning.</li>
+<li><strong>George W. Bush:</strong> Despite starting with a higher test perplexity (775.91), the model achieved a final test perplexity of 452.25, indicating improvement but remaining higher than that of Obama.</li>
+<li><strong>George H. Bush:</strong> Similar to George W. Bush, the model improved its test perplexity significantly from 720.28 to 398.97, but it also remained higher than Obama’s final perplexity.</li>
+<li><strong>Training vs. Test Perplexity:</strong> The training perplexity consistently remains lower than the test perplexity across iterations. This could indicate a slight overfitting, especially for certain speeches, but the perplexity values are converging towards each other.</li>
+<li><strong>Learning Efficiency:</strong> The speed at which perplexity decreases suggests that the model is effectively learning the linguistic patterns. The significant drops between the first few iterations (e.g., from 567.34 to 392.19 for Obama) demonstrate effective initial learning.</li>
+</ul>
+<h3 id="model-parameters-1">Model Parameters</h3>
+<p>As discussed in part 1, number of parameters for transformation layer can be calculated by,<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mo stretchy="false">(</mo><mtext>Input&nbsp;Features</mtext><mo>×</mo><mtext>Output&nbsp;Features</mtext><mo stretchy="false">)</mo><mo>+</mo><mtext>Bias</mtext></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = (\text{Input Features} \times \text{Output Features}) + \text{Bias}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Input&nbsp;Features</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord text"><span class="mord">Output&nbsp;Features</span></span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Bias</span></span></span></span></span></span></span></p>
+<ol>
+<li>
+<p><strong>Token and Position Embeddings (No bias terms)</strong>:</p>
+<ul>
+<li><strong>Embedding for Tokens</strong>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mtext>vocab_size</mtext><mo>×</mo><mtext>embed_dim</mtext><mo>=</mo><mn>5755</mn><mo>×</mo><mn>64</mn><mo>=</mo><mn>368</mn><mo separator="true">,</mo><mn>320</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = \text{vocab\_size} \times \text{embed\_dim} = 5755 \times 64 = 368,320
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">vocab_size</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">5755</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">368</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">320</span></span></span></span></span></span></li>
+<li><strong>Embedding for Positional Encoding</strong>: This embedding is static as we use absolute positional encoding</li>
+</ul>
+</li>
+<li>
+<p><strong>Transformer Decoder Layers</strong>:<br>
+Each <code>TransformerDecoderLayer</code> contains:</p>
+<ul>
+<li>
+<p><strong>Parameters in <code>MaskedMultiHeadAttention</code></strong>:</p>
+<ul>
+<li>For <code>Q</code>, <code>K</code>,  <code>V</code>, and <code>output</code> linear layers:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mn>4</mn><mo>×</mo><mo stretchy="false">[</mo><mo stretchy="false">(</mo><mtext>embed_dim</mtext><mo>×</mo><mtext>embed_dim</mtext><mo stretchy="false">)</mo><mo>+</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mo stretchy="false">]</mo><mo>=</mo><mn>4</mn><mo>×</mo><mo stretchy="false">[</mo><msup><mtext>64</mtext><mn>2</mn></msup><mo>+</mo><mn>64</mn><mo stretchy="false">]</mo><mo>=</mo><mn>16</mn><mo separator="true">,</mo><mn>640</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = 4 \times [(\text{embed\_dim} \times \text{embed\_dim})  + bias] = 4 \times [\text{64}^2 + 64] = 16,640
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.06em; vertical-align: -0.31em;"></span><span class="mopen">[(</span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.06em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal">bia</span><span class="mord mathnormal">s</span><span class="mclose">]</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.11411em; vertical-align: -0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord text"><span class="mord">64</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.864108em;"><span class="" style="top: -3.113em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">64</span><span class="mclose">]</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">16</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">640</span></span></span></span></span></span></li>
+</ul>
+</li>
+<li>
+<p><strong>Feedforward Network</strong>:</p>
+<ul>
+<li>First linear layer:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mtext>embed_dim</mtext><mo>×</mo><mtext>ff_dim</mtext><mo>+</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mo>=</mo><mn>64</mn><mo>×</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>=</mo><mn>6500</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = \text{embed\_dim} \times \text{ff\_dim} + bias = 64 \times 100 + 100 = 6500
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">ff_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">bia</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">6500</span></span></span></span></span></span></li>
+<li>Second linear layer:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mtext>ff_dim</mtext><mo>×</mo><mtext>embed_dim</mtext><mo>+</mo><mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi><mo>=</mo><mn>100</mn><mo>×</mo><mn>64</mn><mo>+</mo><mn>64</mn><mo>=</mo><mn>6464</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = \text{ff\_dim} \times \text{embed\_dim} + bias = 100 \times 64 + 64 = 6464
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">ff_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">bia</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">6464</span></span></span></span></span></span></li>
+</ul>
+</li>
+<li>
+<p><strong>Layer Normalization</strong>: Each layer normalization typically has two parameters (weight and bias) per feature dimension:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mn>2</mn><mo>×</mo><mtext>embed_dim</mtext><mo>=</mo><mn>2</mn><mo>×</mo><mn>64</mn><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = 2 \times \text{embed\_dim} = 2 \times 64 = 128
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">128</span></span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>Total for one</strong> <code>TransformerDecoderLayer</code>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total&nbsp;Parameters</mtext><mo>=</mo><mn>16</mn><mo separator="true">,</mo><mn>640</mn><mo>+</mo><mn>6</mn><mo separator="true">,</mo><mn>500</mn><mo>+</mo><mn>6464</mn><mo>+</mo><mn>128</mn><mo>+</mo><mn>128</mn><mo>=</mo><mn>29860</mn></mrow><annotation encoding="application/x-tex">
+\text{Total Parameters} = 16,640 + 6,500 + 6464 + 128 + 128 = 29860 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Total&nbsp;Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">16</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">640</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">6</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">500</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">6464</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">128</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">128</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">29860</span></span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>Total for all layers</strong>:<br>
+If we have <code>num_layers</code>,<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total&nbsp;for&nbsp;Layers</mtext><mo>=</mo><mtext>num_layers</mtext><mo>×</mo><mo stretchy="false">(</mo><mtext>Total&nbsp;for&nbsp;one&nbsp;layer</mtext><mo stretchy="false">)</mo><mo>=</mo><mn>4</mn><mo>×</mo><mn>29860</mn></mrow><annotation encoding="application/x-tex">
+\text{Total for Layers} = \text{num\_layers} \times (\text{Total for one layer}) = 4 \times 29860
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord text"><span class="mord">Total&nbsp;for&nbsp;Layers</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">num_layers</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord text"><span class="mord">Total&nbsp;for&nbsp;one&nbsp;layer</span></span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">29860</span></span></span></span></span></span><br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total&nbsp;for&nbsp;layers</mtext><mo>=</mo><mn>119</mn><mo separator="true">,</mo><mn>440</mn></mrow><annotation encoding="application/x-tex">
+\text{Total for layers} = 119,440
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord text"><span class="mord">Total&nbsp;for&nbsp;layers</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">119</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">440</span></span></span></span></span></span></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Other layers in <code>TransformerDecoder</code></strong>:</p>
+<ul>
+<li><strong>Layer Normalization</strong>: Each layer normalization typically has two parameters (weight and bias) per feature dimension:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mn>2</mn><mo>×</mo><mtext>embed_dim</mtext><mo>=</mo><mn>2</mn><mo>×</mo><mn>64</mn><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = 2 \times \text{embed\_dim} = 2 \times 64 = 128
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">128</span></span></span></span></span></span></li>
+<li><strong>Output Layer</strong>: Projects vectors from embed_dim to vocab_size<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Parameters</mtext><mo>=</mo><mtext>embed_dim</mtext><mo>×</mo><mtext>vocab_size</mtext><mo>+</mo><mtext>vocab_size</mtext><mo>=</mo><mn>64</mn><mo>×</mo><mn>5755</mn><mo>+</mo><mn>5755</mn><mo>=</mo><mn>374</mn><mo separator="true">,</mo><mn>075</mn></mrow><annotation encoding="application/x-tex">
+\text{Parameters} = \text{embed\_dim}  \times  \text{vocab\_size} + \text{vocab\_size} = 64\times5755 + 5755 = 374,075
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">embed_dim</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">vocab_size</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00444em; vertical-align: -0.31em;"></span><span class="mord text"><span class="mord">vocab_size</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">64</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">5755</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">5755</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">374</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">075</span></span></span></span></span></span></li>
+</ul>
+</li>
+<li>
+<p><strong>Total trainable parameters in <code>TransformerDecoder</code></strong>:</p>
+<ul>
+<li><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total&nbsp;Trainable&nbsp;Parameters</mtext><mo>=</mo><mtext>Token&nbsp;Embedding</mtext><mo>+</mo><mtext>Decoder&nbsp;Layers</mtext><mo>+</mo><mtext>Normalization&nbsp;Layer</mtext><mo>+</mo><mtext>Output&nbsp;Layer</mtext></mrow><annotation encoding="application/x-tex">
+  \text{Total Trainable Parameters} = \text{Token Embedding} + \text{Decoder Layers} + \text{Normalization Layer} + \text{Output Layer}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Total&nbsp;Trainable&nbsp;Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord text"><span class="mord">Token&nbsp;Embedding</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord text"><span class="mord">Decoder&nbsp;Layers</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord text"><span class="mord">Normalization&nbsp;Layer</span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.87777em; vertical-align: -0.19444em;"></span><span class="mord text"><span class="mord">Output&nbsp;Layer</span></span></span></span></span></span></span></li>
+<li><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Total&nbsp;Trainable&nbsp;Parameters</mtext><mo>=</mo><mn>368</mn><mo separator="true">,</mo><mn>320</mn><mo>+</mo><mn>119</mn><mo separator="true">,</mo><mn>440</mn><mo>+</mo><mn>128</mn><mo>+</mo><mn>374</mn><mo separator="true">,</mo><mn>075</mn><mo>=</mo><mn>861</mn><mo separator="true">,</mo><mn>963</mn></mrow><annotation encoding="application/x-tex">
+  \text{Total Trainable Parameters} = 368,320 + 119,440 + 128 +  374,075 = 861,963
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord text"><span class="mord">Total&nbsp;Trainable&nbsp;Parameters</span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">368</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">320</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">119</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">440</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.72777em; vertical-align: -0.08333em;"></span><span class="mord">128</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">374</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">075</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.83888em; vertical-align: -0.19444em;"></span><span class="mord">861</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">963</span></span></span></span></span></span></li>
+</ul>
+</li>
+</ol>
+<h3 id="output-1">Output:</h3>
+<pre><code>Loading data and creating tokenizer ...
+Vocabulary size is 5755
+
+
+Training and Testing LM for 0: Barack Obama
+Iteration [100/500], Training Perplexity: 567.34, Test Perplexity: 680.03
+Iteration [200/500], Training Perplexity: 392.19, Test Perplexity: 525.82
+Iteration [300/500], Training Perplexity: 286.79, Test Perplexity: 449.00
+Iteration [400/500], Training Perplexity: 216.10, Test Perplexity: 398.32
+Iteration [500/500], Training Perplexity: 172.04, Test Perplexity: 371.26
+
+
+Training and Testing LM for 1: George W. Bush
+Iteration [100/500], Training Perplexity: 577.55, Test Perplexity: 775.91
+Iteration [200/500], Training Perplexity: 405.37, Test Perplexity: 612.83
+Iteration [300/500], Training Perplexity: 274.80, Test Perplexity: 517.62
+Iteration [400/500], Training Perplexity: 198.02, Test Perplexity: 461.38
+Iteration [500/500], Training Perplexity: 153.60, Test Perplexity: 452.25
+
+
+Training and Testing LM for 2: George H. Bush
+Iteration [100/500], Training Perplexity: 582.72, Test Perplexity: 720.28
+Iteration [200/500], Training Perplexity: 417.83, Test Perplexity: 571.90
+Iteration [300/500], Training Perplexity: 289.76, Test Perplexity: 472.10
+Iteration [400/500], Training Perplexity: 217.54, Test Perplexity: 419.76
+Iteration [500/500], Training Perplexity: 171.96, Test Perplexity: 398.97
+
+Encoding Sentence: More of you have lost your homes and even more are watching your home values plummet.
+Input tensor shape: torch.Size([1, 32])
+Number of attention maps = Layers * heads =  8
+Figure(800x800)
+
+Encoding Sentence: For peace to come, it is time for them, and all of us, to live up to our responsibilities.
+Input tensor shape: torch.Size([1, 32])
+Number of attention maps = Layers * heads =  8
+Figure(800x800)
+====================================================================================================
+Layer (type:depth-idx)                             Output Shape              Param #
+====================================================================================================
+TransformerDecoder                                 [16, 32, 5755]            --
+├─Embedding: 1-1                                   [16, 32, 64]              368,320
+├─Dropout: 1-2                                     [16, 32, 64]              --
+├─ModuleList: 1-3                                  --                        --
+│    └─TransformerDecoderLayer: 2-1                [16, 32, 64]              --
+│    │    └─MaskedMultiHeadAttention: 3-1          [16, 32, 64]              16,640
+│    │    └─Dropout: 3-2                           [16, 32, 64]              --
+│    │    └─LayerNorm: 3-3                         [16, 32, 64]              128
+│    │    └─Sequential: 3-4                        [16, 32, 64]              12,964
+│    │    └─Dropout: 3-5                           [16, 32, 64]              --
+│    │    └─LayerNorm: 3-6                         [16, 32, 64]              128
+│    └─TransformerDecoderLayer: 2-2                [16, 32, 64]              --
+│    │    └─MaskedMultiHeadAttention: 3-7          [16, 32, 64]              16,640
+│    │    └─Dropout: 3-8                           [16, 32, 64]              --
+│    │    └─LayerNorm: 3-9                         [16, 32, 64]              128
+│    │    └─Sequential: 3-10                       [16, 32, 64]              12,964
+│    │    └─Dropout: 3-11                          [16, 32, 64]              --
+│    │    └─LayerNorm: 3-12                        [16, 32, 64]              128
+│    └─TransformerDecoderLayer: 2-3                [16, 32, 64]              --
+│    │    └─MaskedMultiHeadAttention: 3-13         [16, 32, 64]              16,640
+│    │    └─Dropout: 3-14                          [16, 32, 64]              --
+│    │    └─LayerNorm: 3-15                        [16, 32, 64]              128
+│    │    └─Sequential: 3-16                       [16, 32, 64]              12,964
+│    │    └─Dropout: 3-17                          [16, 32, 64]              --
+│    │    └─LayerNorm: 3-18                        [16, 32, 64]              128
+│    └─TransformerDecoderLayer: 2-4                [16, 32, 64]              --
+│    │    └─MaskedMultiHeadAttention: 3-19         [16, 32, 64]              16,640
+│    │    └─Dropout: 3-20                          [16, 32, 64]              --
+│    │    └─LayerNorm: 3-21                        [16, 32, 64]              128
+│    │    └─Sequential: 3-22                       [16, 32, 64]              12,964
+│    │    └─Dropout: 3-23                          [16, 32, 64]              --
+│    │    └─LayerNorm: 3-24                        [16, 32, 64]              128
+├─LayerNorm: 1-4                                   [16, 32, 64]              128
+├─Linear: 1-5                                      [16, 32, 5755]            374,075
+====================================================================================================
+Total params: 861,963
+Trainable params: 861,963
+Non-trainable params: 0
+Total mult-adds (Units.MEGABYTES): 13.79
+====================================================================================================
+Input size (MB): 0.00
+Forward/backward pass size (MB): 33.08
+Params size (MB): 3.45
+Estimated Total Size (MB): 36.53
+====================================================================================================
+</code></pre>
+<hr>
+<h3 id="part-3">PART 3</h3>
+<p>To create a comprehensive report, we can divide the findings into sections covering <strong>Introduction</strong>, <strong>Experimental Setup</strong>, <strong>Results (with tables)</strong>, and <strong>Discussion</strong>. Here’s a draft for each section with tables to summarize the performance metrics for each model.</p>
+<hr>
+<h3 id="report-comparison-of-positional-encoding-in-transformer-models-for-speech-classification">Report: Comparison of Positional Encoding in Transformer Models for Speech Classification</h3>
+<h4 id="introduction-2"><strong>1. Introduction</strong></h4>
+<p>This experiment investigates the effectiveness of two positional encoding techniques — <strong>Absolute Positional Encoding</strong> (using sinusoidal functions) and <strong>Attention with Linear Biases (Alibi)</strong> — on a transformer encoder model tasked with classifying excerpts of speeches from three U.S. presidents: Barack Obama, George W. Bush, and George H. Bush. Each encoding type represents positional information differently, which may affect the model’s ability to capture and generalize patterns within the speeches.</p>
+<h4 id="experimental-setup"><strong>2. Experimental Setup</strong></h4>
+<p>A transformer encoder model was developed to generate contextual word embeddings, which were then fed into a feedforward classifier to predict the speaker. The model was trained over 100 epochs using both encoding methods, and training and test accuracies were recorded. The vocabulary size was 5755 tokens.</p>
+<h4 id="optimizer-and-loss-function-1">Optimizer and Loss Function:</h4>
+<p><strong>Optimizer</strong>: AdamW optimizer was used for training the transformer models in this experiment. AdamW is an improved version of the Adam optimizer, specifically designed to decouple weight decay from the gradient update rule, thereby enhancing model generalization. In traditional Adam, weight decay is integrated into the optimization step, which can inadvertently affect the moving averages of past gradients. AdamW, however, applies weight decay as a separate step, preserving the intended benefits of L2 regularization and helping prevent overfitting. This makes it particularly well-suited for transformer-based architectures where regularization is essential for stable training and robust model performance.</p>
+<p><strong>Loss Function</strong>: The cross-entropy loss function was used to quantify the difference between the predicted class probabilities and the true class labels. This loss function is commonly used in classification tasks, as it measures the performance of a model whose output is a probability value between 0 and 1. The objective is to minimize the cross-entropy loss during training, leading to improved classification accuracy.</p>
+<h4 id="model-architecture-1">Model Architecture:</h4>
+<p><strong>Absolute Positional Encoding</strong>: The positional encoding for the<span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.65952em; vertical-align: 0em;"></span><span class="mord mathnormal">i</span></span></span></span></span>-th position and<span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">d</span></span></span></span></span>-th dimension is defined as follows:</p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mi>E</mi><mo stretchy="false">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo separator="true">,</mo><mn>2</mn><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>sin</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mfrac><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow><mrow><mn>1000</mn><msup><mn>0</mn><mfrac><mrow><mn>2</mn><mi>i</mi></mrow><msub><mi>d</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub></mfrac></msup></mrow></mfrac><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+PE(pos, 2i) = \sin\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">PE</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">2</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 2.46193em; vertical-align: -1.01193em;"></span><span class="mop">sin</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="minner"><span class="mopen delimcenter" style="top: 0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.10756em;"><span class="" style="top: -2.11em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="mord"><span class="mord">1000</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.12193em;"><span class="" style="top: -3.52337em; margin-right: 0.05em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.855086em;"><span class="" style="top: -2.656em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3448em;"><span class="" style="top: -2.3448em; margin-left: 0em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.69444em;"></span><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right: 0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.34964em;"><span class=""></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.2255em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line mtight" style="border-bottom-width: 0.049em;"></span></span><span class="" style="top: -3.384em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.593743em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.35193em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.79893em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 1.01193em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top: 0em;"><span class="delimsizing size3">)</span></span></span></span></span></span></span></span><br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mi>E</mi><mo stretchy="false">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo separator="true">,</mo><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mi>cos</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><mfrac><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow><mrow><mn>1000</mn><msup><mn>0</mn><mfrac><mrow><mn>2</mn><mi>i</mi></mrow><msub><mi>d</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub></mfrac></msup></mrow></mfrac><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+PE(pos, 2i + 1) = \cos\left(\frac{pos}{10000^{\frac{2i}{d_{model}}}}\right)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.05764em;">PE</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord">2</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 2.46193em; vertical-align: -1.01193em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="minner"><span class="mopen delimcenter" style="top: 0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.10756em;"><span class="" style="top: -2.11em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="mord"><span class="mord">1000</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.12193em;"><span class="" style="top: -3.52337em; margin-right: 0.05em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.855086em;"><span class="" style="top: -2.656em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.3448em;"><span class="" style="top: -2.3448em; margin-left: 0em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.69444em;"></span><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right: 0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.34964em;"><span class=""></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.2255em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line mtight" style="border-bottom-width: 0.049em;"></span></span><span class="" style="top: -3.384em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.593743em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.35193em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.79893em;"><span class="pstrut" style="height: 3.12193em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 1.01193em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top: 0em;"><span class="delimsizing size3">)</span></span></span></span></span></span></span></span><br>
+<strong>AliBi Positional Encoding</strong>: Attention with Linear Biases (AliBi) encoding is a positional encoding method designed to introduce biases into the attention mechanism based on the relative distances between tokens. Unlike absolute positional encodings, which assign each token a unique position, Alibi encoding applies a learned linear bias that scales according to the distance between tokens. This setup allows the model to modulate the importance of positional relationships flexibly, which is particularly useful for handling long sequences where certain token distances hold more contextual significance. In this experiment, a scaling factor was introduced to amplify the bias effect, making Alibi encoding adaptable for the speech classification task.</p>
+<ul>
+<li>The bias matrix is generally formulated:</li>
+</ul>
+<p>Given:</p>
+<ul>
+<li><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">d</span></span></span></span></span> as the distance between tokens in the sequence (e.g., token <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.65952em; vertical-align: 0em;"></span><span class="mord mathnormal">i</span></span></span></span></span> and token <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.85396em; vertical-align: -0.19444em;"></span><span class="mord mathnormal" style="margin-right: 0.05724em;">j</span></span></span></span></span> have <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mi mathvariant="normal">∣</mi><mi>i</mi><mo>−</mo><mi>j</mi><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">d = |i - j|</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.05724em;">j</span><span class="mord">∣</span></span></span></span></span>),</li>
+<li>A scaling factor <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">s</span></span></span></span></span> for each head (often set empirically or fixed across heads).</li>
+</ul>
+<p>The bias <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">b_{i,j}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.980548em; vertical-align: -0.286108em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.311664em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right: 0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.286108em;"><span class=""></span></span></span></span></span></span></span></span></span></span> between tokens <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.65952em; vertical-align: 0em;"></span><span class="mord mathnormal">i</span></span></span></span></span> and <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.85396em; vertical-align: -0.19444em;"></span><span class="mord mathnormal" style="margin-right: 0.05724em;">j</span></span></span></span></span> in the sequence is computed as:</p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>b</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub><mo>=</mo><mo>−</mo><mi>s</mi><mo>×</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">
+b_{i,j} = - s \times d
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.980548em; vertical-align: -0.286108em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.311664em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right: 0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.286108em;"><span class=""></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.66666em; vertical-align: -0.08333em;"></span><span class="mord">−</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">d</span></span></span></span></span></span></p>
+<p>where:</p>
+<ul>
+<li><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal">s</span></span></span></span></span> is a negative scalar multiplier that increases the bias with token distance,</li>
+<li><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">d</span></span></span></span></span> is the absolute difference <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>i</mi><mo>−</mo><mi>j</mi><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">|i - j|</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.05724em;">j</span><span class="mord">∣</span></span></span></span></span>.</li>
+</ul>
+<p>In practice, each attention head <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathnormal">h</span></span></span></span></span> can use a distinct scaling factor <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>h</mi></msub></mrow><annotation encoding="application/x-tex">s_h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.58056em; vertical-align: -0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.336108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span>, giving a separate bias matrix <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi></mrow><annotation encoding="application/x-tex">B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.05017em;">B</span></span></span></span></span> for each head, where each element is calculated as:</p>
+<p><span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>B</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow><mrow><mo stretchy="false">(</mo><mi>h</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>=</mo><mo>−</mo><msub><mi>s</mi><mi>h</mi></msub><mo>×</mo><mi mathvariant="normal">∣</mi><mi>i</mi><mo>−</mo><mi>j</mi><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">
+B^{(h)}_{i,j} = - s_h \times |i - j|
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.45777em; vertical-align: -0.412972em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.0448em;"><span class="" style="top: -2.42314em; margin-left: -0.05017em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right: 0.05724em;">j</span></span></span></span><span class="" style="top: -3.2198em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">h</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.412972em;"><span class=""></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.73333em; vertical-align: -0.15em;"></span><span class="mord">−</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.336108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.05724em;">j</span><span class="mord">∣</span></span></span></span></span></span></p>
+<p>This bias matrix is then added to the attention logits prior to softmax normalization, emphasizing or de-emphasizing token relationships based on distance in a linearly scaled way.</p>
+<p><strong>Encoder Architecture</strong>: The encoder comprises 4 layers, each containing 2 attention heads. This multi-layer architecture allows the model to learn hierarchical representations of the input data while utilizing multiple attention heads to focus on different parts of the input sequence. The use of absolute positional encoding ensures that the sequential information is preserved across the layers.</p>
+<p><strong>Classifier Architecture</strong>: Following the encoder, a simple feedforward classifier was implemented with one hidden layer. The hidden layer uses the ReLU (Rectified Linear Unit) activation function, which helps introduce non-linearity into the model. This architecture allows the classifier to make predictions based on the features extracted by the encoder.</p>
+<h4 id="hyperparameters-1">Hyperparameters:</h4>
+
+<table>
+<thead>
+<tr>
+<th>Hyperparameter</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>embed_dim</code></td>
+<td>64</td>
+<td>Dimension of the embedding vectors for each token in the input sequence.</td>
+</tr>
+<tr>
+<td><code>num_heads</code></td>
+<td>2</td>
+<td>Number of attention heads in each multi-head attention layer of the transformer.</td>
+</tr>
+<tr>
+<td><code>num_layers</code></td>
+<td>4</td>
+<td>Number of transformer encoder layers in the model.</td>
+</tr>
+<tr>
+<td><code>num_classes</code></td>
+<td>3</td>
+<td>Number of output classes (Barack Obama, George W. Bush, George H. Bush).</td>
+</tr>
+<tr>
+<td><code>n_input</code></td>
+<td>64</td>
+<td>Input size for the classifier; matches the embedding dimension of the transformer.</td>
+</tr>
+<tr>
+<td><code>ff_dim</code></td>
+<td>100</td>
+<td>Dimensionality of the feedforward layer’s hidden layer in the transformer encoder.</td>
+</tr>
+<tr>
+<td><code>max_len</code></td>
+<td>32</td>
+<td>Maximum sequence length for the input tokens (or block size).</td>
+</tr>
+<tr>
+<td><code>batch_size</code></td>
+<td>16</td>
+<td>Number of samples processed in each training/testing iteration (batch size).</td>
+</tr>
+<tr>
+<td><code>dropout</code></td>
+<td>0.1</td>
+<td>Dropout rate applied during training to prevent overfitting.</td>
+</tr>
+<tr>
+<td><code>num_epochs</code></td>
+<td>100</td>
+<td>Total number of training epochs.</td>
+</tr>
+<tr>
+<td><code>learning_rate</code></td>
+<td>1e-4</td>
+<td>Learning rate for the optimizer, controlling the step size in the gradient descent process.</td>
+</tr>
+<tr>
+<td><code>weight_decay</code></td>
+<td>1e-1</td>
+<td>Weight decay applied during optimization to prevent overfitting.</td>
+</tr>
+<tr>
+<td><code>scaling_factor</code></td>
+<td>1.1</td>
+<td>Scaling factor for the distance bias in Alibi encoding to adjust the influence of token distances.</td>
+</tr>
+</tbody>
+</table><h4 id="results-1"><strong>3. Results</strong></h4>
+<p align="center">
+  <img src="part3-Figure-train.png" alt="" width="300">
+  <img src="part3-Figure-test.png" alt="" width="300">
+</p>
+<p>The tables below compare the training and test accuracies achieved by both models over selected epochs.</p>
+<p><strong>Table 1: Training Accuracy (%)</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Epoch</th>
+<th>Absolute Positional Encoding</th>
+<th>Alibi Encoding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>44.79</td>
+<td>45.17</td>
+</tr>
+<tr>
+<td>10</td>
+<td>49.76</td>
+<td>51.10</td>
+</tr>
+<tr>
+<td>20</td>
+<td>56.79</td>
+<td>60.56</td>
+</tr>
+<tr>
+<td>30</td>
+<td>65.82</td>
+<td>69.17</td>
+</tr>
+<tr>
+<td>50</td>
+<td>75.62</td>
+<td>82.46</td>
+</tr>
+<tr>
+<td>70</td>
+<td>80.69</td>
+<td>88.58</td>
+</tr>
+<tr>
+<td>90</td>
+<td>85.76</td>
+<td>93.12</td>
+</tr>
+<tr>
+<td>100</td>
+<td>86.71</td>
+<td>93.79</td>
+</tr>
+</tbody>
+</table><p><strong>Table 2: Test Accuracy (%)</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Epoch</th>
+<th>Absolute Positional Encoding</th>
+<th>Alibi Encoding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>33.33</td>
+<td>39.47</td>
+</tr>
+<tr>
+<td>10</td>
+<td>47.87</td>
+<td>50.13</td>
+</tr>
+<tr>
+<td>20</td>
+<td>55.33</td>
+<td>60.27</td>
+</tr>
+<tr>
+<td>30</td>
+<td>67.07</td>
+<td>67.73</td>
+</tr>
+<tr>
+<td>50</td>
+<td>74.80</td>
+<td>80.67</td>
+</tr>
+<tr>
+<td>70</td>
+<td>78.80</td>
+<td>85.20</td>
+</tr>
+<tr>
+<td>90</td>
+<td>86.00</td>
+<td>86.67</td>
+</tr>
+<tr>
+<td>100</td>
+<td>85.20</td>
+<td>87.60</td>
+</tr>
+</tbody>
+</table><h4 id="discussion"><strong>4. Discussion</strong></h4>
+<p>In the discussion section, we can focus on how <strong>Alibi encoding</strong> exhibited slightly better performance than <strong>Absolute Positional Encoding</strong> but showed early signs of overfitting as training progressed. This overfitting could stem from the Alibi encoding’s more complex representation of positional information, allowing it to capture greater variance in context.</p>
+<ol>
+<li>
+<p><strong>Early Epochs Advantage</strong>: Alibi encoding demonstrated a consistent edge over Absolute Positional Encoding in both training and test accuracies from the early stages. This suggests that Alibi encoding is more capable of incorporating positional relationships, enhancing the model’s initial ability to identify relevant context in speeches by different presidents.</p>
+</li>
+<li>
+<p><strong>Variance Capture and Overfitting</strong>: The Alibi-based model maintained higher training accuracy, signaling its capacity to capture finer positional nuances. This improved performance, however, appeared to introduce some degree of overfitting. Alibi’s scaling of positional biases enables it to capture complex patterns based on token distances, adding flexibility in attending to varying context lengths across speeches. This adaptability, while beneficial, can sometimes lead to model overfitting, especially if the model starts memorizing specific patterns rather than generalizing them effectively.</p>
+</li>
+<li>
+<p><strong>Performance Plateau</strong>: Absolute Positional Encoding reached a performance peak (86.00%) around epoch 70, while Alibi encoding continued improving until the final epoch, attaining a slightly higher accuracy (87.60%). This difference could indicate that Alibi encoding’s added complexity and variance capture extend the model’s capacity to learn, though it may require careful tuning to avoid overfitting in applications where generalization is critical.</p>
+</li>
+</ol>
+<p>Overall, Alibi encoding provided a nuanced advantage, demonstrating its potential as a more adaptable method for modeling complex relationships within sequential data. The results suggest that Alibi’s approach, if tuned appropriately, could offer improved generalization over traditional positional encoding in tasks where context-sensitive positional information is pivotal.</p>
+<h4 id="effects-of-positional-encoding-strategies-on-attention-maps">Effects of positional encoding strategies on Attention maps</h4>
+<p align="center">
+  <img src="part3-attention_map_32-1.png" alt="" width="300">
+  <img src="part3-attention_map_32-2.png" alt="" width="300">
+</p>
+<p>The attention maps from the transformer encoder with absolute positional encoding and AliBi positional encoding reveal distinct patterns in how attention is distributed. The map using absolute positional encoding shows a more scattered attention pattern, with certain tokens such as “Because” and “brought” receiving concentrated focus, indicating reliance on explicit positional cues to maintain context. In contrast, the AliBi positional encoding map displays a pronounced diagonal pattern, emphasizing sequential and local dependencies. This suggests that AliBi allows the model to naturally prioritize nearby tokens, enhancing its ability to capture relative positions effectively. This difference highlights how each encoding method influences the model’s capacity to handle long-range dependencies and contextual nuances within sequences.</p>
+<h4 id="effects-of-scaling-factor-on-attention-maps-in-alibi-positional-encoding">Effects of scaling factor on Attention maps in AliBi Positional Encoding</h4>
+<p align="center">
+  <img src="part3-attention_map_20.png" alt="" width="200">
+  <img src="part3-attention_map_10.png" alt="" width="200">
+  <img src="part3-attention_map_05.png" alt="" width="200">
+</p>
+<p>The attention maps generated using AliBi positional encoding with different scaling factors (0.5, 1.0, and 2.0) demonstrate how the scaling factor affects the distribution of attention scores. With a scaling factor of 2.0, the attention map shows a strong diagonal pattern, indicating a focus on local context and nearby tokens. This suggests that higher scaling factors enhance the model’s ability to capture short-range dependencies. As the scaling factor decreases to 1.0, the attention distribution becomes slightly more spread out, balancing between local and broader contextual information. At a scaling factor of 0.5, the attention pattern is even more dispersed, allowing the model to consider longer-range dependencies more effectively. This progression illustrates that lower scaling factors enable a token to extend its attention span across more distant tokens and higher scaling factors make tokens focus on the nearest neighbours.</p>
+<h4 id="conclusion-1"><strong>5. Conclusion</strong></h4>
+<p>The experiment demonstrates that <strong>Alibi encoding with a scaling factor</strong> can provide better performance in terms of training and test accuracy on a speech classification task. Alibi encoding’s ability to capture positional variance more effectively seems to help the transformer model generalize well across different types of political speeches. This supports its suitability in scenarios with complex, context-dependent token relationships. The experiment also highlights that although more complex encoding strategies allow to capture higher variance in the data, it also makes them susceptible to overfitting. In such cases, hyperparameter tuning and regularization become all the more important. The choice of positional encodings used can significantly impact the model performance.</p>
+<h4 id="output-2">Output:</h4>
+<pre><code>Loading data and creating tokenizer ...
+Vocabulary size is 5755
+Comparing performance of a Transformer Encoder Model with FF Classifier on Absolute Positional Encoding (Sinusoidal) vs AliBi (Attention with Linear Biases)
+
+Using Absolute Positional Encoding:
+Epoch [5/100], Training Accuracy: 44.79, Test Accuracy: 33.33
+Epoch [10/100], Training Accuracy: 49.76, Test Accuracy: 47.87
+Epoch [15/100], Training Accuracy: 52.87, Test Accuracy: 52.93
+Epoch [20/100], Training Accuracy: 56.79, Test Accuracy: 55.33
+Epoch [25/100], Training Accuracy: 61.04, Test Accuracy: 60.80
+Epoch [30/100], Training Accuracy: 65.82, Test Accuracy: 67.07
+Epoch [35/100], Training Accuracy: 68.55, Test Accuracy: 68.27
+Epoch [40/100], Training Accuracy: 71.75, Test Accuracy: 72.67
+Epoch [45/100], Training Accuracy: 71.99, Test Accuracy: 76.27
+Epoch [50/100], Training Accuracy: 75.62, Test Accuracy: 74.80
+Epoch [55/100], Training Accuracy: 77.39, Test Accuracy: 79.33
+Epoch [60/100], Training Accuracy: 78.59, Test Accuracy: 81.47
+Epoch [65/100], Training Accuracy: 79.59, Test Accuracy: 82.00
+Epoch [70/100], Training Accuracy: 80.69, Test Accuracy: 78.80
+Epoch [75/100], Training Accuracy: 82.07, Test Accuracy: 82.40
+Epoch [80/100], Training Accuracy: 83.65, Test Accuracy: 82.80
+Epoch [85/100], Training Accuracy: 84.03, Test Accuracy: 83.20
+Epoch [90/100], Training Accuracy: 85.76, Test Accuracy: 86.00
+Epoch [95/100], Training Accuracy: 86.76, Test Accuracy: 85.20
+Epoch [100/100], Training Accuracy: 86.71, Test Accuracy: 85.20
+
+Using AliBi (Attention with Linear Biases):
+Epoch [5/100], Training Accuracy: 45.17, Test Accuracy: 39.47
+Epoch [10/100], Training Accuracy: 51.10, Test Accuracy: 50.13
+Epoch [15/100], Training Accuracy: 54.92, Test Accuracy: 55.07
+Epoch [20/100], Training Accuracy: 60.56, Test Accuracy: 60.27
+Epoch [25/100], Training Accuracy: 65.01, Test Accuracy: 62.67
+Epoch [30/100], Training Accuracy: 69.17, Test Accuracy: 67.73
+Epoch [35/100], Training Accuracy: 72.66, Test Accuracy: 70.00
+Epoch [40/100], Training Accuracy: 76.05, Test Accuracy: 74.53
+Epoch [45/100], Training Accuracy: 78.97, Test Accuracy: 77.07
+Epoch [50/100], Training Accuracy: 82.46, Test Accuracy: 80.67
+Epoch [55/100], Training Accuracy: 83.27, Test Accuracy: 80.53
+Epoch [60/100], Training Accuracy: 85.33, Test Accuracy: 83.87
+Epoch [65/100], Training Accuracy: 86.57, Test Accuracy: 84.27
+Epoch [70/100], Training Accuracy: 88.58, Test Accuracy: 85.20
+Epoch [75/100], Training Accuracy: 89.05, Test Accuracy: 85.47
+Epoch [80/100], Training Accuracy: 89.58, Test Accuracy: 84.27
+Epoch [85/100], Training Accuracy: 91.16, Test Accuracy: 86.13
+Epoch [90/100], Training Accuracy: 93.12, Test Accuracy: 86.67
+Epoch [95/100], Training Accuracy: 93.12, Test Accuracy: 87.33
+Epoch [100/100], Training Accuracy: 93.79, Test Accuracy: 87.60
+
+Encoding Sentence: When one nation pursues a nuclear weapon, the risk of nuclear attack rises for all nations.
+Input tensor shape: torch.Size([1, 32])
+Number of attention maps = Layers * heads =  8
+Figure(800x800)
+
+Encoding Sentence: When one nation pursues a nuclear weapon, the risk of nuclear attack rises for all nations.
+Input tensor shape: torch.Size([1, 32])
+Number of attention maps = Layers * heads =  8
+Figure(800x800)
+
+Plot saved as Figure-train.png
+
+Plot saved as Figure-test.png
+</code></pre>
+</div>
+</body>
+
+</html>
